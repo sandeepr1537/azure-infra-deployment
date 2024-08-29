@@ -18,7 +18,7 @@ jobs:
         with:
           terraform_version: 1.4.5
 
-     - name: Terraform Init for Resource Group
+      - name: Terraform Init for Resource Group
         working-directory: terraform/resource-group
         run: terraform init
 
