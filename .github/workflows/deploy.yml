@@ -18,13 +18,16 @@ jobs:
         with:
           terraform_version: 1.4.5
 
-      - name: Terraform Init
+     - name: Terraform Init for Resource Group
+        working-directory: terraform/resource-group
         run: terraform init
 
-      - name: Terraform Plan
+      - name: Terraform Plan for Resource Group
+        working-directory: terraform/resource-group
         run: terraform plan
 
-      - name: Terraform Apply
+      - name: Terraform Apply for Resource Group
+        working-directory: terraform/resource-group
         run: terraform apply -auto-approve
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
