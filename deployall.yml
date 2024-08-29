@@ -1,0 +1,70 @@
+name: Deploy Azure Resources
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: Terraform Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.5
+
+      - name: Terraform Init for Resource Group
+        working-directory: terraform/resource-group
+        run: terraform init
+
+      - name: Terraform Plan for Resource Group
+        working-directory: terraform/resource-group
+        run: terraform plan
+
+      - name: Terraform Apply for Resource Group
+        working-directory: terraform/resource-group
+        run: terraform apply -auto-approve
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Terraform Init for Storage Account
+        working-directory: terraform/storage-account
+        run: terraform init
+
+      - name: Terraform Plan for Storage Account
+        working-directory: terraform/storage-account
+        run: terraform plan
+
+      - name: Terraform Apply for Storage Account
+        working-directory: terraform/storage-account
+        run: terraform apply -auto-approve
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Terraform Init for Virtual Machine
+        working-directory: terraform/virtual-machine
+        run: terraform init
+
+      - name: Terraform Plan for Virtual Machine
+        working-directory: terraform/virtual-machine
+        run: terraform plan
+
+      - name: Terraform Apply for Virtual Machine
+        working-directory: terraform/virtual-machine
+        run: terraform apply -auto-approve
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
